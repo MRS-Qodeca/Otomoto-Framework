@@ -3,6 +3,8 @@ import { ExamplePage } from '../pages/ExamplePage';
 import { LoginPage } from '../pages/LoginPage';
 import { CheckboxesPage } from '../pages/CheckboxesPage';
 import { DropdownPage } from '../pages/DropdownPage';
+import { HomePage } from '../pages/HomePage';
+import { SearchResultsPage } from '../pages/SearchResultsPage';
 // Tu będziemy importować kolejne strony w miarę ich tworzenia / Here we will import additional pages as we create them
 
 // Definiujemy typy dla naszych fixtures / Define types for our fixtures
@@ -11,6 +13,8 @@ type MyFixtures = {
   loginPage: LoginPage;
   checkboxesPage: CheckboxesPage;
   dropdownPage: DropdownPage;
+  homePage: HomePage;
+  searchResultsPage: SearchResultsPage;
   // Dodaj kolejne strony tutaj / Add more pages here
 };
 
@@ -37,6 +41,15 @@ export const pageFixture = base.extend<MyFixtures>({
     await use(dropdownPage);
   },
 
+  homePage: async ({ page }, use) => {
+    const homePage = new HomePage(page);
+    await use(homePage);
+  }, 
+
+  searchResultsPage: async ({ page }, use) => {
+    const searchResultsPage = new SearchResultsPage(page);
+    await use(searchResultsPage);
+  }, 
   // Dodaj kolejne strony tutaj / Add more pages here
 });
 
