@@ -1,0 +1,60 @@
+{
+  "name": "magnus-automation-framework",
+  "version": "2.1.10",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "taskkill /F /IM chrome.exe /T || exit 0",
+    "report": "npx playwright show-report",
+    "allure:clear": "rimraf allure-results allure-report test-results",
+    "allure:report": "npx allure serve allure-results",
+    "bdd:gen": "npx bddgen",
+    "test:specs": "npx playwright test --project=\"[SPEC] Chromium\" --project=\"[SPEC] Firefox\" --project=\"[SPEC] WebKit\"",
+    "test:bdd": "npx bddgen && npx playwright test --project=\"[BDD] Chromium\" --project=\"[BDD] Firefox\" --project=\"[BDD] WebKit\"",
+    "test:chromium": "npx bddgen && npx playwright test --project=\"[SPEC] Chromium\" --project=\"[BDD] Chromium\"",
+    "test:firefox": "npx bddgen && npx playwright test --project=\"[SPEC] Firefox\" --project=\"[BDD] Firefox\"",
+    "test:webkit": "npx bddgen && npx playwright test --project=\"[SPEC] WebKit\" --project=\"[BDD] WebKit\"",
+    "test:desktop": "npx bddgen && npx playwright test --project=\"[SPEC] Chromium\" --project=\"[BDD] Chromium\" --project=\"[SPEC] Firefox\" --project=\"[BDD] Firefox\" --project=\"[SPEC] WebKit\" --project=\"[BDD] WebKit\"",
+    "test:mobile": "npx bddgen && npx playwright test --project=\"[SPEC] Mobile Chrome\" --project=\"[BDD] Mobile Chrome\" --project=\"[SPEC] Mobile Safari\" --project=\"[BDD] Mobile Safari\"",
+    "test:branded": "npx bddgen && npx playwright test --project=\"[SPEC] Google Chrome\" --project=\"[BDD] Google Chrome\" --project=\"[SPEC] MS Edge\" --project=\"[BDD] MS Edge\"",
+    "test:all": "npx bddgen && npx playwright test",
+    "test:all:headed": "npx bddgen && npx playwright test --headed",
+    "test:ui": "npx bddgen && npx playwright test --ui",
+    "test:debug": "npx bddgen && npx playwright test --debug",
+    "test:critical": "npx bddgen && npx playwright test -g \"@critical\""
+  },
+  "keywords": [
+    "Playwright",
+    "Automation",
+    "Testing",
+    "Framework"
+  ],
+  "author": "Marek Robak-Sobolewski",
+  "license": "MIT",
+  "type": "commonjs",
+  "description": "Powerful Playwright-based testing engine",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.8.0",
+    "@types/pg": "^8.20.0",
+    "@typescript-eslint/eslint-plugin": "^8.59.3",
+    "@typescript-eslint/parser": "^8.59.3",
+    "allure-playwright": "^3.8.0",
+    "eslint": "^10.3.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-playwright": "^2.10.2",
+    "playwright-lighthouse": "^4.0.0",
+    "prettier": "^3.8.3",
+    "rimraf": "^6.1.3",
+    "typescript-eslint": "^8.59.3"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
+    "mysql2": "^3.22.3",
+    "pdfjs-dist-es5": "^2.13.216",
+    "pg": "^8.20.0",
+    "playwright-bdd": "^8.5.1"
+  }
+}

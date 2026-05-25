@@ -1,0 +1,8 @@
+@database @smoke
+Feature: Functionality
+
+  Scenario: User can do something on Example Page
+    Given I am on Example Page
+    When I do something
+    Then Expected result happens
+    # And The page should be accessible according to WCAG standards
