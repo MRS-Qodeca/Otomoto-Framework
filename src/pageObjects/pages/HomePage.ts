@@ -9,15 +9,15 @@ export class HomePage extends BasePage {
   }
 
   private get makeDropdown(): Locator {
-    return this.page.locator('button[type="button"]').filter({ hasText: 'Marka pojazdu' });
+    return this.page.getByPlaceholder('Marka pojazdu');
   }
 
   private get modelDropdown(): Locator {
-    return this.page.locator('button[type="button"]').filter({ hasText: 'Model pojazdu' });
+    return this.page.getByPlaceholder('Model pojazdu');
   }
 
   private get searchButton(): Locator {
-    return this.page.locator('button[type="submit"]');
+    return this.page.locator('button').filter({ hasText: 'Pokaż' });
   }
 
   async acceptCookies() {
@@ -41,6 +41,8 @@ export class HomePage extends BasePage {
   }
 
   async clickSearch() {
+    await this.searchButton.waitFor({ state: 'visible', timeout: 5000 });
     await this.searchButton.click();
+    await this.page.waitForURL('**/osobowe/**', { timeout: 7000 });
   }
 }
