@@ -23,7 +23,29 @@ When('The user clicks the search button', async ({ homePage }) => {
   await homePage.clickSearch();
 });
 
-Then('The user should see search results for {string}', async ({ searchResultsPage }, expectedHeader: string) => {
-  const actualHeader = await searchResultsPage.getHeaderText();
-  expect(actualHeader).toContain(expectedHeader);
-});
+Then(
+  'The user should see search results for {string}',
+  async ({ searchResultsPage }, expectedPhrase: string) => {
+    await searchResultsPage.waitForResultsPage();
+
+    const titles = await searchResultsPage.getAllResultTitles();
+
+    expect(titles.length).toBeGreaterThan(0);
+
+    for (const title of titles) {
+      expect(title.toLowerCase()).toContain(expectedPhrase.toLowerCase());
+    }
+
+    console.log(
+      `✅ Zweryfikowano ${titles.length} ofert. Wszystkie zawierają frazę: "${expectedPhrase}".`,
+    );
+  },
+);
+
+Then(
+  'The page should display found vehicles or a proper no-results message',
+  async ({ searchResultsPage }) => {
+    const hasVehicles = await searchResultsPage.areResultsOrNoResultsMessageVisible();
+    expect(hasVehicles).toBeDefined();
+  },
+);

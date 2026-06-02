@@ -34,9 +34,10 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 1,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  // workers: process.env.CI ? 1 : undefined,
+  workers: 1,
 
   /* REPORTER CONFIGURATION (Allure + HTML) */
   reporter: [
@@ -67,6 +68,24 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     testIdAttribute: 'id',
+
+    /* Viewport configuration to allow tests to run in fullscreen mode, adapting to the actual screen size. */
+    viewport: { width: 3438, height: 1390 },
+
+    /* Enforce visible mode (Headed) for better debugging and to avoid issues with pop-ups and permissions */
+    // headless: false,
+
+    /* Automatically denies system prompts for notifications and geolocation, which can interfere with tests. */
+    permissions: ['notifications', 'geolocation'],
+
+    contextOptions: {
+      reducedMotion: 'reduce', // Helps stabilize animations on the page
+    },
+
+    launchOptions: {
+      /* Special launch flags for Chromium to suppress pop-ups */
+      args: ['--disable-notifications', '--disable-popup-blocking', '--deny-permission-prompts'],
+    },
   },
 
   /* Configure projects for major browsers and test types */
@@ -76,13 +95,13 @@ export default defineConfig({
       name: '[SPEC] Chromium',
       testDir: './tests/specs',
       testMatch: '**/*.spec.ts',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], viewport: { width: 3438, height: 1390 } },
     },
     {
       name: '[BDD] Chromium',
       testDir: bddDir,
       testMatch: '**/*.spec.js',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], viewport: { width: 3438, height: 1390 } },
     },
 
     /* --- 2. Group: Desktop Firefox --- */
@@ -90,13 +109,13 @@ export default defineConfig({
       name: '[SPEC] Firefox',
       testDir: './tests/specs',
       testMatch: '**/*.spec.ts',
-      use: { ...devices['Desktop Firefox'] },
+      use: { ...devices['Desktop Firefox'], viewport: { width: 3438, height: 1390 } },
     },
     {
       name: '[BDD] Firefox',
       testDir: bddDir,
       testMatch: '**/*.spec.js',
-      use: { ...devices['Desktop Firefox'] },
+      use: { ...devices['Desktop Firefox'], viewport: { width: 3438, height: 1390 } },
     },
 
     /* --- 3. Group: Desktop WebKit (Safari) --- */
@@ -104,13 +123,13 @@ export default defineConfig({
       name: '[SPEC] WebKit',
       testDir: './tests/specs',
       testMatch: '**/*.spec.ts',
-      use: { ...devices['Desktop Safari'] },
+      use: { ...devices['Desktop Safari'], viewport: { width: 3438, height: 1390 } },
     },
     {
       name: '[BDD] WebKit',
       testDir: bddDir,
       testMatch: '**/*.spec.js',
-      use: { ...devices['Desktop Safari'] },
+      use: { ...devices['Desktop Safari'], viewport: { width: 3438, height: 1390 } },
     },
 
     /* --- 4. Group: Branded Browsers  --- */

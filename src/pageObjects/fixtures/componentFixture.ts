@@ -5,6 +5,7 @@ import { Footer, FooterSelectors } from '../components/Footer';
 import { Dropdown, DropdownSelectors } from '../components/Dropdown';
 import { CheckboxGroup, CheckboxSelectors } from '../components/CheckboxGroup';
 import { Button, ButtonSelectors } from '../components/Button';
+import { SearchFilters } from '../components/SearchFilters';
 
 // 1. Rozszerzamy typy o nasze komponenty / We extend the types with our components
 type MyComponentFixtures = {
@@ -15,6 +16,7 @@ type MyComponentFixtures = {
   dropdown: Dropdown;
   checkboxGroup: CheckboxGroup;
   button: Button;
+  searchFilters: SearchFilters;
 };
 
 /**
@@ -58,11 +60,19 @@ const buttonConfig: ButtonSelectors = {
   root: 'button#submit',
 };
 
+const searchFiltersConfig = {
+  root: 'main', // Cały panel filtrów w sekcji głównej strony
+  yearFromPlaceholder: 'Rok od',
+  fuelTypePlaceholder: 'Rodzaj paliwa',
+  moreFiltersText: 'Więcej filtrów',
+  countryPlaceholder: 'Kraj pochodzenia',
+};
+
 // 2. Rozszerzamy bazę o nasze obiekty / We extend the base with our objects
 export const componentFixture = base.extend<MyComponentFixtures>({
   exampleOnMainPage: async ({ page }, use) => {
     const component = new ExampleComponent(page, {
-      root: '.main-container',
+      root: 'body',
       input: '#user-input',
       button: '.submit-btn',
     });
@@ -91,5 +101,10 @@ export const componentFixture = base.extend<MyComponentFixtures>({
   // Button
   button: async ({ page }, use) => {
     await use(new Button(page, buttonConfig));
+  },
+
+  //Zestaw zaawansowanych filtrów wyszukiwania
+  searchFilters: async ({ page }, use) => {
+    await use(new SearchFilters(page, searchFiltersConfig));
   },
 });

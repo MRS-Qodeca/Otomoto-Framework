@@ -2,15 +2,35 @@ import { Locator } from '@playwright/test';
 import { BasePage } from '../BasePage';
 
 export class SearchResultsPage extends BasePage {
-  public readonly path: string = '/osobowe';
+  public readonly path: string = '/osobowe/';
 
-  private get pageHeader(): Locator {
-    return this.page.getByRole('heading', { level: 1 }).filter({ hasText: 'Samochody Osobowe' });
+  private get vehicleCardTitles(): Locator {
+    return this.page.locator('main article h2, main article [data-testid="ad-title"]');
   }
 
-  async getHeaderText(): Promise<string> {
-    await this.page.waitForURL(`**${this.path}**`, { timeout: 5000 });
-    await this.pageHeader.waitFor({ state: 'visible', timeout: 5000 });
-    return await this.pageHeader.innerText();
+  private get resultsArticles(): Locator {
+    return this.page.locator('main article');
+  }
+
+  async waitForResultsPage() {
+    // Czekamy tylko, aż adres URL zmieni się na właściwy dla wyników
+    await this.page.waitForURL(new RegExp(this.path), {
+      waitUntil: 'domcontentloaded',
+      timeout: 7000,
+    });
+  }
+
+  async areResultsOrNoResultsMessageVisible(): Promise<boolean> {
+    const count = await this.resultsArticles.count();
+    const isNoResultsVisible = await this.page.getByText('Nie znaleźliśmy ogłoszeń').isVisible();
+    return count > 0 || isNoResultsVisible;
+  }
+
+  // NOWOŚĆ: Prawdziwa asercja biznesowa sprawdzająca zawartość ofert
+  async getAllResultTitles(): Promise<string[]> {
+    await this.resultsArticles.first().waitFor({ state: 'visible', timeout: 5000 });
+
+    // allTextContents() zbiera teksty ze wszystkich kafelków na raz do tablicy stringów
+    return await this.vehicleCardTitles.allTextContents();
   }
 }

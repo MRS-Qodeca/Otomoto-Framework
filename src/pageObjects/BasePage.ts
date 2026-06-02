@@ -38,7 +38,11 @@ export abstract class BasePage {
    * Automatic navigation to root.
    * */
   async navigate(path: string = '') {
-    await this.page.goto(path);
+    // Dodajemy waitUntil: 'domcontentloaded', żeby Firefox nie wisiał na skryptach reklamowych
+    await this.page.goto(path, {
+      waitUntil: 'domcontentloaded',
+      timeout: 20000,
+    });
   }
 
   /**

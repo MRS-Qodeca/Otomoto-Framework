@@ -4,8 +4,9 @@ import { BasePage } from '../BasePage';
 export class HomePage extends BasePage {
   public readonly path: string = '/';
 
+  // --- GETTERY (LOKATORY) ---
   private get acceptCookiesButton(): Locator {
-    return this.page.locator('#onetrust-accept-btn-handler');
+    return this.page.getByRole('button', { name: 'Zezwól na wszystkie' });
   }
 
   private get makeDropdown(): Locator {
@@ -20,20 +21,36 @@ export class HomePage extends BasePage {
     return this.page.locator('button').filter({ hasText: 'Pokaż' });
   }
 
+  // fullscreen tylko do celów prezentacji, aby lepiej pokazać działanie testów na dużym ekranie.
+  // async open() {
+  //   await this.page.setViewportSize({ width: 3438, height: 1390 });
+  //   await super.open();
+  // }
+
   async acceptCookies() {
-    await this.acceptCookiesButton.waitFor({ state: 'visible', timeout: 5000 });
-    await this.acceptCookiesButton.click();
+    try {
+      await this.acceptCookiesButton.waitFor({ state: 'visible', timeout: 4000 });
+      await this.acceptCookiesButton.click();
+
+      await this.page
+        .locator('.onetrust-pc-dark-filter')
+        .waitFor({ state: 'hidden', timeout: 3000 })
+        .catch(() => {});
+    } catch {
+      console.log('ℹ️ Baner cookies nie pojawił się (sesja czysta lub zapamiętana).');
+    }
   }
 
   private async selectOptionFromDropdown(dropdownLocator: Locator, optionText: string) {
     await dropdownLocator.click();
     const option = this.page.locator(`div[role="option"]:has-text("${optionText}")`).first();
-    await option.waitFor({ state: 'visible', timeout: 5000 });
+    await option.waitFor({ state: 'visible', timeout: 3000 });
     await option.click();
   }
 
   async selectMake(makeName: string) {
     await this.selectOptionFromDropdown(this.makeDropdown, makeName);
+    await this.page.waitForTimeout(500);
   }
 
   async selectModel(modelName: string) {
@@ -41,8 +58,7 @@ export class HomePage extends BasePage {
   }
 
   async clickSearch() {
-    await this.searchButton.waitFor({ state: 'visible', timeout: 5000 });
+    await this.searchButton.waitFor({ state: 'visible', timeout: 3000 });
     await this.searchButton.click();
-    await this.page.waitForURL('**/osobowe/**', { timeout: 7000 });
   }
 }

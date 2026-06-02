@@ -13,7 +13,7 @@
     "test:chromium": "npx bddgen && npx playwright test --project=\"[SPEC] Chromium\" --project=\"[BDD] Chromium\"",
     "test:firefox": "npx bddgen && npx playwright test --project=\"[SPEC] Firefox\" --project=\"[BDD] Firefox\"",
     "test:webkit": "npx bddgen && npx playwright test --project=\"[SPEC] WebKit\" --project=\"[BDD] WebKit\"",
-    "test:desktop": "npx bddgen && npx playwright test --project=\"[SPEC] Chromium\" --project=\"[BDD] Chromium\" --project=\"[SPEC] Firefox\" --project=\"[BDD] Firefox\" --project=\"[SPEC] WebKit\" --project=\"[BDD] WebKit\"",
+    "test:WEB": "npx bddgen && npx playwright test --project=\"[SPEC] Chromium\" --project=\"[BDD] Chromium\" --project=\"[SPEC] Firefox\" --project=\"[BDD] Firefox\" --project=\"[SPEC] WebKit\" --project=\"[BDD] WebKit\"",
     "test:mobile": "npx bddgen && npx playwright test --project=\"[SPEC] Mobile Chrome\" --project=\"[BDD] Mobile Chrome\" --project=\"[SPEC] Mobile Safari\" --project=\"[BDD] Mobile Safari\"",
     "test:branded": "npx bddgen && npx playwright test --project=\"[SPEC] Google Chrome\" --project=\"[BDD] Google Chrome\" --project=\"[SPEC] MS Edge\" --project=\"[BDD] MS Edge\"",
     "test:all": "npx bddgen && npx playwright test",
