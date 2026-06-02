@@ -1,4 +1,4 @@
-Feature: Vehicle Search on Otomoto - Basic Data Driven
+Feature: Vehicle Search
 
   @critical
   Scenario Outline: Search for a passenger car by various makes and models
@@ -7,7 +7,7 @@ Feature: Vehicle Search on Otomoto - Basic Data Driven
     And The user selects the make "<Make>"
     And The user selects the model "<Model>"
     And The user clicks the search button
-    Then The user should see search results for "<Make>"
+    Then The user should see search results for make "<Make>" and model "<Model>"
     And The page should display found vehicles or a proper no-results message
 
     Examples:
@@ -18,5 +18,5 @@ Feature: Vehicle Search on Otomoto - Basic Data Driven
       | Volkswagen    | Golf       |
       | Toyota        | RAV4       |
       | Hyundai       | i30        |
-      | Mazda         | 6          |
+      | Skoda         | Octavia    |
       | Porsche       | 911        |

@@ -24,21 +24,19 @@ When('The user clicks the search button', async ({ homePage }) => {
 });
 
 Then(
-  'The user should see search results for {string}',
-  async ({ searchResultsPage }, expectedPhrase: string) => {
+  'The user should see search results for make {string} and model {string}',
+  async ({ searchResultsPage }, expectedMake: string, expectedModel: string) => {
     await searchResultsPage.waitForResultsPage();
 
     const titles = await searchResultsPage.getAllResultTitles();
-
     expect(titles.length).toBeGreaterThan(0);
 
     for (const title of titles) {
-      expect(title.toLowerCase()).toContain(expectedPhrase.toLowerCase());
+      expect(title).toContain(expectedMake);
+      expect(title).toContain(expectedModel);
     }
 
-    console.log(
-      `✅ Zweryfikowano ${titles.length} ofert. Wszystkie zawierają frazę: "${expectedPhrase}".`,
-    );
+    console.log(`Wyniki zawierają: ${expectedMake} ${expectedModel}`);
   },
 );
 

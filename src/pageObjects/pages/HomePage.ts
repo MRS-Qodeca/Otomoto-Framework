@@ -4,7 +4,6 @@ import { BasePage } from '../BasePage';
 export class HomePage extends BasePage {
   public readonly path: string = '/';
 
-  // --- GETTERY (LOKATORY) ---
   private get acceptCookiesButton(): Locator {
     return this.page.getByRole('button', { name: 'Zezwól na wszystkie' });
   }
@@ -20,12 +19,6 @@ export class HomePage extends BasePage {
   private get searchButton(): Locator {
     return this.page.locator('button').filter({ hasText: 'Pokaż' });
   }
-
-  // fullscreen tylko do celów prezentacji, aby lepiej pokazać działanie testów na dużym ekranie.
-  // async open() {
-  //   await this.page.setViewportSize({ width: 3438, height: 1390 });
-  //   await super.open();
-  // }
 
   async acceptCookies() {
     try {

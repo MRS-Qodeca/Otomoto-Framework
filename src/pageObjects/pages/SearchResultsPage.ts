@@ -13,7 +13,6 @@ export class SearchResultsPage extends BasePage {
   }
 
   async waitForResultsPage() {
-    // Czekamy tylko, aż adres URL zmieni się na właściwy dla wyników
     await this.page.waitForURL(new RegExp(this.path), {
       waitUntil: 'domcontentloaded',
       timeout: 7000,
@@ -26,7 +25,6 @@ export class SearchResultsPage extends BasePage {
     return count > 0 || isNoResultsVisible;
   }
 
-  // NOWOŚĆ: Prawdziwa asercja biznesowa sprawdzająca zawartość ofert
   async getAllResultTitles(): Promise<string[]> {
     await this.resultsArticles.first().waitFor({ state: 'visible', timeout: 5000 });
 

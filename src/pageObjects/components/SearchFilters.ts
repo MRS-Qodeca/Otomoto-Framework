@@ -34,6 +34,7 @@ export class SearchFilters extends BasePageComponent {
   }
 
   private async ensureFiltersPanelIsOpen() {
+    // Sprawdza czy przycisk "Więcej filtrów" jest widoczny - jeśli tak, klika go, aby odsłonić zaawansowane opcje
     if (await this.moreFiltersButton.isVisible()) {
       await this.moreFiltersButton.click();
       await this.yearFromInput.waitFor({ state: 'visible', timeout: 3000 });
@@ -42,10 +43,12 @@ export class SearchFilters extends BasePageComponent {
 
   private async selectOption(dropdownLocator: Locator, optionText: string) {
     await dropdownLocator.click();
-    await dropdownLocator.fill(optionText);
 
+    // Elastyczny selektor szukający kontenera opcji dropdownu Otomoto
     const option = this.page
-      .locator('[class*="dropdown"], [class*="menu"], [class*="list"], [role="listbox"]')
+      .locator(
+        '[class*="dropdown"], [class*="menu"], [class*="list"], [role="listbox"], [class*="ListBox"]',
+      )
       .getByText(optionText, { exact: true })
       .first();
 
