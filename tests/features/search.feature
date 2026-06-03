@@ -1,7 +1,7 @@
 Feature: Vehicle Search
 
   @critical
-  Scenario Outline: Search for a passenger car by various makes and models
+  Scenario: Search for a passenger car by various makes and models
     Given The user is on the Otomoto homepage
     When The user accepts the cookies policy
     And The user selects the make "<Make>"

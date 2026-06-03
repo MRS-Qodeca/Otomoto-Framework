@@ -11,16 +11,14 @@ type MyComponentFixtures = {
  * Here we put constants for a specific project, e.g., NavBar and Footer configuration.
  */
 const searchFiltersConfig = {
-  root: 'main', // Cały panel filtrów w sekcji głównej strony
+  root: 'main',
   yearFromPlaceholder: 'Rok od',
-  fuelTypePlaceholder: 'Rodzaj paliwa',
   moreFiltersText: 'Więcej filtrów',
-  countryPlaceholder: 'Kraj pochodzenia',
+  priceToPlaceholder: 'do',
 };
 
 // 2. Rozszerzamy bazę o nasze obiekty / We extend the base with our objects
 export const componentFixture = base.extend<MyComponentFixtures>({
-  //Zestaw zaawansowanych filtrów wyszukiwania
   searchFilters: async ({ page }, use) => {
     await use(new SearchFilters(page, searchFiltersConfig));
   },

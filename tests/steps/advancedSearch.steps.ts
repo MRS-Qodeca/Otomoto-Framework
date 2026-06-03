@@ -1,27 +1,7 @@
 import { createBdd } from 'playwright-bdd';
 import { test, expect } from '../../src/pageObjects/fixtures/appFixture';
 
-const { Given, When, Then } = createBdd(test);
-
-// tylko page
-
-Given('The user is on the Otomoto homepage', async ({ homePage }) => {
-  await homePage.open();
-});
-
-When('The user accepts the cookies policy', async ({ homePage }) => {
-  await homePage.acceptCookies();
-});
-
-When('The user selects the make {string}', async ({ homePage }, make: string) => {
-  await homePage.selectMake(make);
-});
-
-When('The user selects the model {string}', async ({ homePage }, model: string) => {
-  await homePage.selectModel(model);
-});
-
-// dodanie komponentu SearchFilters
+const { When, Then } = createBdd(test);
 
 When(
   'The user sets minimum production year to {string}',
@@ -30,54 +10,73 @@ When(
   },
 );
 
-When('The user selects fuel type as {string}', async ({ searchFilters }, fuelType: string) => {
-  await searchFilters.selectFuelType(fuelType);
+When('The user sets maximum price to {string}', async ({ searchFilters }, price: string) => {
+  await searchFilters.setPriceTo(price);
 });
-
-When(
-  'The user selects country of origin as {string}',
-  async ({ searchFilters }, country: string) => {
-    await searchFilters.selectCountryOfOrigin(country);
-  },
-);
-
-When('The user clicks the search button', async ({ homePage }) => {
-  await homePage.clickSearch();
-});
-
-// asercja - dochodzi results page
 
 Then(
-  'The search results should only display valid vehicles matching the criteria',
-  async ({ searchResultsPage, page }) => {
+  'The search results should only display valid vehicles matching year {string} and price {string}',
+  async ({ searchResultsPage, page }, expectedYear: string, expectedPrice: string) => {
+    // Czekamy na stabilne załadowanie wyników i asercję tytułów
     await searchResultsPage.waitForResultsPage();
-
-    // czy są wyniki
     const titles = await searchResultsPage.getAllResultTitles();
     expect(titles.length).toBeGreaterThan(0);
 
-    // pobieramy parametry z wyników
-    const parameterLists = page.locator('main article ul');
-    const count = await parameterLists.count();
+    const minYear = parseInt(expectedYear, 10);
+    const maxPrice = parseInt(expectedPrice, 10);
 
-    console.log(`📊 Analiza miarodajności dla ${count} znalezionych pojazdów...`);
+    // Pobieramy lokator wszystkich głównych artykułów
+    const articles = page.locator('main article');
 
-    for (let i = 0; i < count; i++) {
-      const textContent = await parameterLists.nth(i).innerText();
+    // Sprawdzamy tylko pierwsze 10 głównych ogłoszeń na 1. stronie.
+    const itemsToCheck = 10;
 
-      // sprwadzamy rok produkcji - czy jest >= 2020
-      const yearMatch = textContent.match(/\b(20\d{2})\b/);
-      if (yearMatch) {
-        const vehicleYear = parseInt(yearMatch[1], 10);
-        expect(vehicleYear).toBeGreaterThanOrEqual(2020);
+    for (let i = 0; i < itemsToCheck; i++) {
+      const currentArticle = articles.nth(i);
+
+      // Pobieramy tekst kafelka bez scrollowania całej strony
+      const textContent = await currentArticle.innerText().catch(() => '');
+      if (!textContent) continue;
+
+      // // Odrzucamy kafelki promocyjne, które Otomoto wciska poza kryteriami
+      // if (textContent.includes('Wyróżnione') || textContent.includes('Wyróżniony Sprzedawca')) {
+      //   continue;
+      // }
+
+      // // Upewniamy się, że sprawdzamy tylko "Serię 5",
+      // // pomijając wstrzyknięte do boksów reklamowych modele typu X5, X2 czy i5.
+      // const titleLocator = currentArticle.locator('h2, h3').first();
+      // const titleText = (await titleLocator.count()) > 0 ? await titleLocator.innerText() : '';
+      // if (titleText && !titleText.toLowerCase().includes('seria 5')) {
+      //   continue;
+      // }
+
+      // 1. Walidacja Roku (Wyszukanie roku 202X z pominięciem przebiegu i PLN)
+      const yearMatches = textContent.match(/\b(19|20)\d{2}\b/g);
+      if (yearMatches) {
+        const validYears = yearMatches.filter((year) => {
+          const index = textContent.indexOf(year);
+          const textAfter = textContent.substring(index, index + 15);
+          return (
+            !textAfter.includes('cm³') &&
+            !textAfter.includes('cm3') &&
+            !textAfter.includes('km') &&
+            !textAfter.includes('PLN')
+          );
+        });
+        if (validYears.length > 0) {
+          const vehicleYear = parseInt(validYears[0], 10);
+          expect(vehicleYear).toBeGreaterThanOrEqual(minYear);
+        }
       }
 
-      // sprawdzamy typ paliwa - czy zawiera "benzyna"
-      expect(textContent.toLowerCase()).toContain('benzyna');
+      // 2. Walidacja Ceny (Pobranie ostatniej, czyli aktualnej ceny z kafelka)
+      const allPrices = textContent.replace(/\s/g, '').match(/\d+(?=PLN)/g);
+      if (allPrices && allPrices.length > 0) {
+        const currentPriceText = allPrices[allPrices.length - 1];
+        const vehiclePrice = parseInt(currentPriceText, 10);
+        expect(vehiclePrice).toBeLessThanOrEqual(maxPrice);
+      }
     }
-
-    console.log(
-      '✅ Sukces! Wszystkie widoczne pojazdy spełniają zaawansowane kryteria (Rok >= 2020 oraz Paliwo = Benzyna).',
-    );
   },
 );

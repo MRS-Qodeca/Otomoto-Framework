@@ -4,9 +4,8 @@ import { BasePageComponent } from '../BasePageComponent';
 export interface SearchFiltersSelectors {
   root: string;
   yearFromPlaceholder: string;
-  fuelTypePlaceholder: string;
   moreFiltersText: string;
-  countryPlaceholder: string;
+  priceToPlaceholder: string;
 }
 
 export class SearchFilters extends BasePageComponent {
@@ -20,56 +19,36 @@ export class SearchFilters extends BasePageComponent {
   private get yearFromInput(): Locator {
     return this.page.getByPlaceholder(this.selectors.yearFromPlaceholder);
   }
-
-  private get fuelTypeDropdown(): Locator {
-    return this.page.getByPlaceholder(this.selectors.fuelTypePlaceholder);
-  }
-
   private get moreFiltersButton(): Locator {
     return this.page.locator('button').filter({ hasText: this.selectors.moreFiltersText });
   }
-
-  private get countryOfOriginDropdown(): Locator {
-    return this.page.getByPlaceholder(this.selectors.countryPlaceholder);
+  private get priceToInput(): Locator {
+    return this.page.getByPlaceholder(this.selectors.priceToPlaceholder).last();
   }
 
+  // Ta metoda jest wywoływana TYLKO raz, przy pierwszym filtrze zaawansowanym
   private async ensureFiltersPanelIsOpen() {
-    // Sprawdza czy przycisk "Więcej filtrów" jest widoczny - jeśli tak, klika go, aby odsłonić zaawansowane opcje
+    await this.page.waitForLoadState('domcontentloaded');
     if (await this.moreFiltersButton.isVisible()) {
       await this.moreFiltersButton.click();
-      await this.yearFromInput.waitFor({ state: 'visible', timeout: 3000 });
+      await this.yearFromInput.waitFor({ state: 'visible', timeout: 5000 });
     }
-  }
-
-  private async selectOption(dropdownLocator: Locator, optionText: string) {
-    await dropdownLocator.click();
-
-    // Elastyczny selektor szukający kontenera opcji dropdownu Otomoto
-    const option = this.page
-      .locator(
-        '[class*="dropdown"], [class*="menu"], [class*="list"], [role="listbox"], [class*="ListBox"]',
-      )
-      .getByText(optionText, { exact: true })
-      .first();
-
-    await option.waitFor({ state: 'visible', timeout: 3000 });
-    await option.click();
   }
 
   async setYearFrom(year: string) {
     await this.ensureFiltersPanelIsOpen();
     await this.yearFromInput.click();
-    await this.yearFromInput.fill(year);
-    await this.yearFromInput.press('Enter');
+    await this.yearFromInput.clear();
+    await this.yearFromInput.pressSequentially(year, { delay: 50 });
+    await this.page.waitForTimeout(200);
   }
 
-  async selectFuelType(fuelType: string) {
-    await this.ensureFiltersPanelIsOpen();
-    await this.selectOption(this.fuelTypeDropdown, fuelType);
-  }
-
-  async selectCountryOfOrigin(countryName: string) {
-    await this.ensureFiltersPanelIsOpen();
-    await this.selectOption(this.countryOfOriginDropdown, countryName);
+  async setPriceTo(price: string) {
+    await this.priceToInput.click();
+    await this.priceToInput.clear();
+    await this.priceToInput.pressSequentially(price, { delay: 50 });
+    await this.page.waitForTimeout(200);
+    await this.priceToInput.press('Enter');
+    await this.page.locator('main article').first().waitFor({ state: 'visible', timeout: 10000 });
   }
 }
