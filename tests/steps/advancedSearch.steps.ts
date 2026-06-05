@@ -38,10 +38,10 @@ Then(
       const textContent = await currentArticle.innerText().catch(() => '');
       if (!textContent) continue;
 
-      // // Odrzucamy kafelki promocyjne, które Otomoto wciska poza kryteriami
-      // if (textContent.includes('Wyróżnione') || textContent.includes('Wyróżniony Sprzedawca')) {
-      //   continue;
-      // }
+      // Odrzucamy kafelki promocyjne, które Otomoto wciska poza kryteriami
+      if (textContent.includes('Wyróżnione') || textContent.includes('Wyróżniony Sprzedawca')) {
+        continue;
+      }
 
       // // Upewniamy się, że sprawdzamy tylko "Serię 5",
       // // pomijając wstrzyknięte do boksów reklamowych modele typu X5, X2 czy i5.

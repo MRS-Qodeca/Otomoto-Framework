@@ -1,7 +1,7 @@
 Feature: Advanced Vehicle Search
 
   @advanced @critical
-  Scenario Outline: Search with basic criteria and verify results data reliability
+  Scenario: Search with basic criteria and verify results data reliability
     Given The user is on the Otomoto homepage
     When The user accepts the cookies policy
     And The user selects the make "<Make>"
