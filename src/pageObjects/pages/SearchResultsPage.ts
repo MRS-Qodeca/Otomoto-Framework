@@ -5,7 +5,7 @@ export class SearchResultsPage extends BasePage {
   public readonly path: string = '/osobowe/';
 
   private get vehicleCardTitles(): Locator {
-    return this.page.locator('main article h2, main article [data-testid="ad-title"]');
+    return this.page.locator('main article h2');
   }
 
   private get resultsArticles(): Locator {
