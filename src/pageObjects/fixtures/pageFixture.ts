@@ -11,7 +11,6 @@ type MyFixtures = {
 };
 
 // Rozszerzamy bazowy test o nasze obiekty / Extend the base test with our page objects
-
 export const pageFixture = base.extend<MyFixtures>({
   homePage: async ({ page }, use) => {
     const homePage = new HomePage(page);
@@ -22,7 +21,6 @@ export const pageFixture = base.extend<MyFixtures>({
     const searchResultsPage = new SearchResultsPage(page);
     await use(searchResultsPage);
   },
-  // Dodaj kolejne strony tutaj / Add more pages here
 });
 
 export { expect } from '@playwright/test';

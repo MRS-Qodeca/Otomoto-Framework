@@ -37,13 +37,12 @@ export class SearchFilters extends BasePageComponent {
     await this.ensureFiltersPanelIsOpen();
     await this.page.waitForLoadState('domcontentloaded');
     await this.yearFromInput.click();
-    await this.yearFromInput.pressSequentially(year, { delay: 50 });
-    await this.page.waitForTimeout(100);
+    await this.yearFromInput.pressSequentially(year);
   }
 
   async setPriceTo(price: string) {
     await this.priceToInput.click();
-    await this.priceToInput.pressSequentially(price, { delay: 50 });
+    await this.priceToInput.pressSequentially(price);
     await this.priceToInput.press('Enter');
     await this.page.waitForURL(new RegExp(`${price}`), { timeout: 10000 });
     await this.page.locator('main article').first().waitFor({ state: 'visible', timeout: 10000 });

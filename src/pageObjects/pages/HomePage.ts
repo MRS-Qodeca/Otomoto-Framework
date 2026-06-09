@@ -39,6 +39,8 @@ export class HomePage extends BasePage {
     const option = this.page.locator(`div[role="option"]:has-text("${optionText}")`).first();
     await option.waitFor({ state: 'visible', timeout: 3000 });
     await option.click();
+    const cookieSdk = this.page.locator('#onetrust-consent-sdk');
+    await cookieSdk.waitFor({ state: 'hidden', timeout: 5000 });
   }
 
   async selectMake(makeName: string) {

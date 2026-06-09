@@ -25,16 +25,20 @@ Then(
     const minYear = parseInt(expectedYear, 10);
     const maxPrice = parseInt(expectedPrice, 10);
 
-    // Pobieramy lokator wszystkich głównych artykułów
+    // Pobieramy lokator wszystkich głównych artykułów i ich liczbę
     const articles = page.locator('main article');
+    const actualCount = await articles.count();
 
-    // Sprawdzamy tylko pierwsze 10 głównych ogłoszeń na 1. stronie.
-    const itemsToCheck = 10;
+    // Sprawdzamy pierwsze 20 ogłoszeń, ale jeśli jest ich mniej (np. 1), sprawdzamy tylko tyle, ile jest
+    const itemsToCheck = Math.min(actualCount, 20);
+
+    // Jeśli na stronie nie ma artykułów, przerywamy, żeby nie kręcić pustej pętli
+    if (itemsToCheck === 0) {
+      throw new Error('No articles found');
+    }
 
     for (let i = 0; i < itemsToCheck; i++) {
       const currentArticle = articles.nth(i);
-
-      // Pobieramy tekst kafelka bez scrollowania całej strony
       const textContent = await currentArticle.innerText().catch(() => '');
       if (!textContent) continue;
 
@@ -43,8 +47,7 @@ Then(
         continue;
       }
 
-      // // Upewniamy się, że sprawdzamy tylko "Serię 5",
-      // // pomijając wstrzyknięte do boksów reklamowych modele typu X5, X2 czy i5.
+      // // Upewniamy się, że sprawdzamy tylko "Serię 5"
       // const titleLocator = currentArticle.locator('h2, h3').first();
       // const titleText = (await titleLocator.count()) > 0 ? await titleLocator.innerText() : '';
       // if (titleText && !titleText.toLowerCase().includes('seria 5')) {

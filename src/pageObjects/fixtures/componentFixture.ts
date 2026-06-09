@@ -14,7 +14,7 @@ const searchFiltersConfig = {
   root: 'main',
   yearFromPlaceholder: 'Rok od',
   moreFiltersText: 'Więcej filtrów',
-  priceToPlaceholder: 'do',
+  priceToPlaceholder: 'Cena do',
 };
 
 // 2. Rozszerzamy bazę o nasze obiekty / We extend the base with our objects

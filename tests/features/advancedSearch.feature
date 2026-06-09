@@ -11,6 +11,7 @@ Feature: Advanced Vehicle Search
     Then The search results should only display valid vehicles matching year "<YearFrom>" and price "<PriceTo>"
 
     Examples:
-      | Make | Model   | YearFrom | PriceTo |
-      | BMW  | Seria 5 | 2020     | 250000  |
-      | Audi | A4      | 2021     | 150000  |
+      | Make  | Model   | YearFrom | PriceTo |
+      | BMW   | Seria 5 | 2020     | 250000  |
+      | Audi  | A4      | 2021     | 150000  |
+      | Toyota| Yaris   | 2020     | 80000   |

@@ -15,8 +15,7 @@ dotenv.config({ path: path.resolve(__dirname, '.env') });
  */
 const bddDir = defineBddConfig({
   features: 'tests/features/*.feature',
-  steps: 'tests/steps/*.ts',
-  importTestFrom: 'src/pageObjects/fixtures/appFixture.ts',
+  steps: ['tests/steps/*.ts', 'src/pageObjects/fixtures/appFixture.ts'],
 });
 
 /**
@@ -95,13 +94,13 @@ export default defineConfig({
       name: '[SPEC] Chromium',
       testDir: './tests/specs',
       testMatch: '**/*.spec.ts',
-      use: { ...devices['Desktop Chrome'], viewport: { width: 3438, height: 1390 } },
+      use: { ...devices['Desktop Chrome'] },
     },
     {
       name: '[BDD] Chromium',
       testDir: bddDir,
       testMatch: '**/*.spec.js',
-      use: { ...devices['Desktop Chrome'], viewport: { width: 3438, height: 1390 } },
+      use: { ...devices['Desktop Chrome'] },
     },
 
     /* --- 2. Group: Desktop Firefox --- */
@@ -109,13 +108,13 @@ export default defineConfig({
       name: '[SPEC] Firefox',
       testDir: './tests/specs',
       testMatch: '**/*.spec.ts',
-      use: { ...devices['Desktop Firefox'], viewport: { width: 3438, height: 1390 } },
+      use: { ...devices['Desktop Firefox'] },
     },
     {
       name: '[BDD] Firefox',
       testDir: bddDir,
       testMatch: '**/*.spec.js',
-      use: { ...devices['Desktop Firefox'], viewport: { width: 3438, height: 1390 } },
+      use: { ...devices['Desktop Firefox'] },
     },
 
     /* --- 3. Group: Desktop WebKit (Safari) --- */
@@ -123,13 +122,13 @@ export default defineConfig({
       name: '[SPEC] WebKit',
       testDir: './tests/specs',
       testMatch: '**/*.spec.ts',
-      use: { ...devices['Desktop Safari'], viewport: { width: 3438, height: 1390 } },
+      use: { ...devices['Desktop Safari'] },
     },
     {
       name: '[BDD] WebKit',
       testDir: bddDir,
       testMatch: '**/*.spec.js',
-      use: { ...devices['Desktop Safari'], viewport: { width: 3438, height: 1390 } },
+      use: { ...devices['Desktop Safari'] },
     },
 
     /* --- 4. Group: Branded Browsers  --- */

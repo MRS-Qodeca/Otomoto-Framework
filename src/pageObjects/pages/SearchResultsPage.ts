@@ -15,7 +15,7 @@ export class SearchResultsPage extends BasePage {
   async waitForResultsPage() {
     await this.page.waitForURL(new RegExp(this.path), {
       waitUntil: 'domcontentloaded',
-      timeout: 7000,
+      timeout: 8000,
     });
   }
 
