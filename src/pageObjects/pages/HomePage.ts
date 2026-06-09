@@ -29,6 +29,11 @@ export class HomePage extends BasePage {
         .locator('.onetrust-pc-dark-filter')
         .waitFor({ state: 'hidden', timeout: 3000 })
         .catch(() => {});
+
+      await this.page
+        .locator('#onetrust-consent-sdk')
+        .waitFor({ state: 'hidden', timeout: 5000 })
+        .catch(() => {});
     } catch {
       console.log('ℹ️ Baner cookies nie pojawił się (sesja czysta lub zapamiętana).');
     }
@@ -39,8 +44,6 @@ export class HomePage extends BasePage {
     const option = this.page.locator(`div[role="option"]:has-text("${optionText}")`).first();
     await option.waitFor({ state: 'visible', timeout: 3000 });
     await option.click();
-    const cookieSdk = this.page.locator('#onetrust-consent-sdk');
-    await cookieSdk.waitFor({ state: 'hidden', timeout: 5000 });
   }
 
   async selectMake(makeName: string) {

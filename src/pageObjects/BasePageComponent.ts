@@ -11,7 +11,8 @@ export abstract class BasePageComponent {
   protected readonly root: Locator;
   protected readonly actions: WebActions;
 
-  // Unia typów 'string | Locator' / 'string | Locator' type union
+  /* Unia typów 'string | Locator' - dzieki temu możemy przekazać zarówno stringa (selector), jak i bezpośrednio obiekt Locator. /
+    Union type 'string | Locator' - allows us to pass either a string (selector) or a Locator object directly. */
   constructor(page: Page, rootSelector: string | Locator) {
     this.page = page;
     this.actions = new WebActions(this.page);

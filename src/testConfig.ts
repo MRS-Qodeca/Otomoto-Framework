@@ -9,9 +9,9 @@ export const testConfig = {
   dev: process.env.DEV_URL || ``,
   prod: process.env.PROD_URL || ``,
 
-  qaApi: `https://reqres.in`,
-  devApi: ``,
-  prodApi: ``,
+  qaApi: process.env.QA_API_URL || ``,
+  devApi: process.env.DEV_API_URL || ``,
+  prodApi: process.env.PROD_API_URL || ``,
 
   username: process.env.USER_NAME || `admin`,
   password: process.env.PASSWORD || `admin`,
